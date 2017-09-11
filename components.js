@@ -1,5 +1,5 @@
-const h = (type, props = {}, children = []) => ({
-  type,
+const h = (typeval, props = {}, children = []) => ({
+  typeval,
   props,
   children
 })
@@ -16,8 +16,8 @@ const ListItemComponent = content => {
   console.log('<ListItemComponent> content = ', content)
   return h('li', {}, [content])
 }
-
+/*
 const RootComponent = (list) => {
   console.log('<RootComponent> list = ', list)
   return h('div', {}, [ ListHeadComponent(list) ])
-}
+}*/
