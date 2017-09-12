@@ -16,8 +16,38 @@ const ListItemComponent = content => {
   console.log('<ListItemComponent> content = ', content)
   return h('li', {}, [content])
 }
-/*
-const RootComponent = (list) => {
-  console.log('<RootComponent> list = ', list)
+
+const RootComponent1 = (list) => {
+  console.log('<RootComponent1> list = ', list)
   return h('div', {}, [ ListHeadComponent(list) ])
-}*/
+}
+
+const WelcomeComponent = ({ name }) => h('div', {}, ['Welcome ' + name]);
+
+const RootComponent2 = ({ user }) => {  
+  if (user) {
+    // The vDOM node's type can also be another
+    // component. React calls it automatically when creating
+    // the vDOM tree
+    return WelcomeComponent({ name: user });
+  } else {
+    return h('div', {}, [`Please, Log in`]);
+  }
+}
+
+RootComponent2({user: 'Ramesh'})
+
+var a = h(
+  "ul",
+  { "class": "list" },
+  [h(
+    "li",
+    null,
+    "item 1"
+  ),
+  h(
+    "li",
+    null,
+    "item 2"
+  )]
+);

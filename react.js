@@ -7,6 +7,13 @@ const createVDOM = (element, id = '.') => {
   if (!element.children) {
     newElement.children = []
   } else {
+    console.log("new element in createVDOM is",newElement)
+    console.log("new element children", newElement.children)
+    console.log("element children",element.children)
+    if (typeof element.children === 'string') {
+      newElement.children = [element.children]
+    } else {
+
 
     newElement.children = element.children.map((child, index) => {
       if (typeof child === 'object') {
@@ -18,8 +25,10 @@ const createVDOM = (element, id = '.') => {
   }
   return newElement
 }
+}
 
 // Component which can display text in either a div or a span
+/*
 const RootComponent = ({ showDiv }) => {  
   if (showDiv) {
     return h('div', {}, ['Hello World']);
@@ -27,11 +36,15 @@ const RootComponent = ({ showDiv }) => {
     return h('span', {}, ['Hello World']);
   }
 }
+*/
 
 // We create one tree that uses div
+/****** Input with left is null************/
+/*
 const leftVDOM = null
 const rightVDOM = createVDOM(RootComponent({ showDiv: false }));
 console.log("rightVDOM is",rightVDOM)
+*/
 /****Input for left != right**************/
 /*
 const leftVDOM = createVDOM(RootComponent({showDiv: true}));
@@ -94,12 +107,90 @@ const diff = (
   console.log("patches are",patches)
 };
 
+const ID_KEY = 'data-react-id'
+const correlateVDOMNode = (vdomNode, domRoot) => {
+  console.log("vdomNode in correlateVDOMNode ",vdomNode)
+  console.log("domRoot in correlateVDOMNode ", domRoot)
+  if (vdomNode === null) {
+    return domRoot
+  } else {
+    return document.querySelector(`[${ID_KEY}='${vdomNode.id}']`)
+  }
+}
 
-const patches = [];  
-diff(leftVDOM, rightVDOM, patches);  
+const createNodeRecursive = (vdomNode, domNode) => {
+  if (typeof vdomNode === 'string') {
+    console.log("i am in 'if' of createNodeRecursive")
+    domNode.innerHTML = vdomNode
+  } else {
+    console.log("i am in 'else' of createNodeRecursive")
+    const domElement = document.createElement(vdomNode.type)
+    domElement.setAttribute(ID_KEY, vdomNode.id)
+    domNode.appendChild(domElement)
+    vdomNode.children.forEach(child => createNodeRecursive(child, domElement))
+  }
+}
+
+const applyPatch = (patch, domRoot) => {
+  switch (patch.type) {
+    case 'PATCH_CREATE_NODE': {
+      console.log("in applyPatch-patch create node")
+      const domNode = correlateVDOMNode(patch.parent, domRoot)
+      console.log("in applyPatch function CREATE NODE",domNode)
+      createNodeRecursive(patch.node, domNode)
+    }
+      break
+    case 'PATCH_REMOVE_NODE': {
+      const domNode = correlateVDOMNode(patch.node, domRoot)
+      domNode.parentNode.removeChild(domNode)
+    }
+      break
+    case 'PATCH_REPLACE_NODE': {
+      const domNode = correlateVDOMNode(patch.replacingNode, domRoot)
+      console.log("in PATCH_REPLACE_NODE")
+      const parentDomNode = domNode.parentNode
+      parentDomNode.removeChild(domNode)
+      createNodeRecursive(patch.node, parentDomNode)
+    }
+      break
+    default:
+      throw new Error(`Missing implementation for patch ${patch.type}`)
+  }
+}
+
+const createRender = domElement => {
+  console.log('domElement is', domElement)
+  let lastVDOM = null
+  let patches = null
+  return element => {
+
+    const vdom = createVDOM(element)
+    console.log("vdom in createRender",vdom)
+    patches = []
+    diff(lastVDOM, vdom, patches)
+    patches.forEach(patch => applyPatch(patch, domElement))
+    console.log("")
+    lastVDOM = vdom
+  }
+}
+
+//STEP-4 TESTCASE
+const appid = document.getElementById('app')
+console.log('appid = ', appid)
+const render = createRender(document.getElementById('app'))
+console.log("render = ",render)
+
+//console.log('render with arg',render({typeval:'div',props:{},children:[]}))
+
+
+setTimeout(() => {  render(RootComponent2({user: 'Ramesh'})) }, 2000);
+setTimeout(() => {  render(a) }, 4000);
+// STEP-3 TEST CASE
+//const patches = [];  
+//diff(leftVDOM, rightVDOM, patches);  
 
 
 /*element is an object with three properties. Those three properties used within
 createVDOM function so give object as input with three properties */
-const vdom = createVDOM({type:'div',props:{},children:[]})
-console.log('vdom = ',vdom)
+//const vdom = createVDOM({type:'div',props:{},children:[]})
+//console.log('vdom = ',vdom)
