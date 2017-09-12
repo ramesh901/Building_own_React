@@ -35,9 +35,7 @@ const RootComponent2 = ({ user }) => {
   }
 }
 
-RootComponent2({user: 'Ramesh'})
-
-var a = h(
+const a = h(
   "ul",
   { "class": "list" },
   [h(
@@ -50,4 +48,10 @@ var a = h(
     null,
     "item 2"
   )]
+);
+
+const b = h(
+  "ul",
+  { "class": "list" },
+  []
 );
