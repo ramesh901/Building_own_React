@@ -86,13 +86,14 @@ const correlateVDOMNode = (vdomNode, domRoot) => {
 
 const createNodeRecursive = (vdomNode, domNode) => {
   if (typeof vdomNode === 'string') {
-    console.log("i am in 'if' of createNodeRecursive")
+    console.log("domNode in createNodeRecursive",domNode)
     domNode.innerHTML = vdomNode
   } else {
-    console.log("i am in 'else' of createNodeRecursive")
-    const domElement = document.createElement(vdomNode.type)
+    const domElement = document.createElement(vdomNode.typeval)
     domElement.setAttribute(ID_KEY, vdomNode.id)
+    console.log('domElement in createNodeRecursive',domElement)
     domNode.appendChild(domElement)
+    console.log('domNode in createNodeRecursive',domNode)
     vdomNode.children.forEach(child => createNodeRecursive(child, domElement))
   }
 }
@@ -134,7 +135,9 @@ const createRender = domElement => {
     console.log("vdom in createRender",vdom)
     patches = []
     diff(lastVDOM, vdom, patches)
-    patches.forEach(patch => applyPatch(patch, domElement))
+    console.log("domElement in return of createRender",domElement)
+    patches.forEach(patch => { console.log("patch is",patch)
+      applyPatch(patch, domElement)})
     console.log("")
     lastVDOM = vdom
   }
@@ -146,8 +149,11 @@ console.log('appid = ', appid)
 const render = createRender(document.getElementById('app'))
 console.log("render = ",render)
 //console.log('render with arg',render({typeval:'div',props:{},children:[]}))
-setTimeout(() => { render(h('div',{},[RootComponent1(['some1'])]))},2000)
-setTimeout(() => {  render(h('div',{},[RootComponent2({user: 'Ramesh'})])) }, 4000)
+
+//let renderComp = [RootComponent1(['some1'])]
+//setTimeout(() => { render(renderComp)},2000)
+setTimeout(() => {  render(h('div',{},[RootComponent2({user: 'Ramesh'})])) }, 2000)
+setTimeout(() => { render(RootComponent1(['Something for you']))},4000)
 setTimeout(() => {  render(a) }, 6000)
 setTimeout(() => {  render(b) }, 8000)
 

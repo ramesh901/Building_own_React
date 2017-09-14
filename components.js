@@ -41,12 +41,12 @@ const a = h(
   [h(
     "li",
     null,
-    "item 1"
+    "Work"
   ),
   h(
     "li",
     null,
-    "item 2"
+    "More Work"
   )]
 );
 
