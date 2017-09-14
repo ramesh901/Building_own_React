@@ -22,36 +22,38 @@ const RootComponent1 = (list) => {
   return h('div', {}, [ ListHeadComponent(list) ])
 }
 
-const WelcomeComponent = ({ name }) => h('div', {}, ['Welcome ' + name]);
+const WelcomeComponent = ({ name }) => h('div', {}, ['Welcome ' + name])
 
-const RootComponent2 = ({ user }) => {  
+const RootComponent2 = ({ user }) => {
   if (user) {
     // The vDOM node's type can also be another
     // component. React calls it automatically when creating
     // the vDOM tree
-    return WelcomeComponent({ name: user });
+    return WelcomeComponent({ name: user })
   } else {
-    return h('div', {}, [`Please, Log in`]);
+    return h('div', {}, [`Please, Log in`])
   }
 }
 
 const a = h(
-  "ul",
-  { "class": "list" },
+  'ul',
+  { 'class': 'list' },
   [h(
-    "li",
+    'li',
     null,
-    "Work"
+    'Work'
   ),
-  h(
-    "li",
+    h(
+    'li',
     null,
-    "More Work"
+    'More Work'
   )]
-);
+)
 
 const b = h(
-  "ul",
-  { "class": "list" },
+  'ul',
+  { 'class': 'list' },
   []
-);
+)
+
+export default RootComponent1,RootComponent2,a,b,h
