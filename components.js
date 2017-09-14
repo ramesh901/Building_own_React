@@ -55,5 +55,3 @@ const b = h(
   { 'class': 'list' },
   []
 )
-
-export default RootComponent1,RootComponent2,a,b,h

@@ -1,4 +1,3 @@
-import './components.js'
 const createVDOM = (element, id = '.') => {
   const newElement = {
     typeval: element.typeval,
